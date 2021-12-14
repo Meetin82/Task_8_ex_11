@@ -166,18 +166,6 @@ public class JTableUtils {
         scrollPane.getRowHeader().getView().setBackground(scrollPane.getColumnHeader().getBackground());
     }
 
-    /**
-     * Настройка JTable для работы с массивами
-     *
-     * @param table                  компонент JTable
-     * @param defaultColWidth        ширина столбцов (ячеек)
-     * @param showRowsIndexes        показывать индексы строк
-     * @param showColsIndexes        показывать индексы столбцов
-     * @param changeRowsCountButtons добавить кнопки для добавления/удаления строк
-     * @param changeColsCountButtons добавить кнопки для добавления/удаления столбцов
-     * @param changeButtonsSize      размер кнопок для изменения количества строк и столбцов
-     * @param changeButtonsMargin    отступ кнопок от таблицы (а также расстояние между кнопками)
-     */
     public static void initJTableForArray(
             JTable table, int defaultColWidth,
             boolean showRowsIndexes, boolean showColsIndexes,
@@ -197,7 +185,6 @@ public class JTableUtils {
         table.setIntercellSpacing(new Dimension(1, 1));
         table.setFillsViewportHeight(false);
         table.setDragEnabled(false);
-        //table.setCursor(Cursor.getDefaultCursor());
         table.putClientProperty("terminateEditOnFocusLost", true);
 
         DefaultTableModel tableModel = new DefaultTableModel(new String[]{"[0]"}, 1) {
@@ -286,8 +273,6 @@ public class JTableUtils {
                 scrollPane.add(panel);
                 scrollPane.getViewport().add(panel);
 
-                // привязываем обработчик событий, который активирует и дективирует зависимые
-                // компоненты (кнопки) в зависимости от состояния table
                 table.addPropertyChangeListener((PropertyChangeEvent evt) -> {
                     if ("enabled".equals(evt.getPropertyName())) {
                         boolean enabled = (boolean) evt.getNewValue();
@@ -299,15 +284,12 @@ public class JTableUtils {
                 });
                 linkedComponents.forEach((comp) -> comp.setEnabled(table.isEnabled()));
 
-                // иначе определенные проблемы с прозрачностью panel возникают
                 scrollPane.setVisible(false);
                 scrollPane.setVisible(true);
 
                 scrollPane = newScrollPane;
             }
 
-            // привязываем отбработчик событий, который снимает выделение,
-            // а также обработчик событий, который будет изменять размер таблицы при изменении высоты строки
             table.addPropertyChangeListener((PropertyChangeEvent evt) -> {
                 if ("enabled".equals(evt.getPropertyName())) {
                     boolean enabled = (boolean) evt.getNewValue();
@@ -319,7 +301,6 @@ public class JTableUtils {
                 }
             });
 
-            // привязываем обработчик событий, который очищает выделенные ячейки по клавише delete
             table.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyPressed(KeyEvent evt) {
@@ -333,8 +314,6 @@ public class JTableUtils {
                 }
             });
 
-            // устанавливаем CellRenderer, который меняет выравнивание в ячейках в зависимости
-            // от содержимого (целые числа - выравнивание вправо, иначе - влево) + красивые отступы
             table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
                 @Override
                 public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -347,8 +326,7 @@ public class JTableUtils {
                     return comp;
                 }
             });
-            // устанавливаем CellEditor, который меняет выравнивание в ячейках в зависимости
-            // от содержимого (целые числа - выравнивание вправо, иначе - влево) + красивые отступы
+  
             table.setDefaultEditor(Object.class, new DefaultCellEditor(new JTextField()) {
                 @Override
                 public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
@@ -369,13 +347,6 @@ public class JTableUtils {
         }
     }
 
-    /**
-     * Аналогичен {@link #initJTableForArray(JTable, int, boolean, boolean, boolean, boolean, int, int) }.
-     * {@code changeButtonsSize} принимает значение {@link #DEFAULT_PLUSMINUS_BUTTONS_SIZE}.
-     * {@code changeButtonsMargin} принимает значение {@link #DEFAULT_GAP}.
-     *
-     * @see #initJTableForArray(JTable, int, boolean, boolean, boolean, boolean, int, int)
-     */
     public static void initJTableForArray(
             JTable table, int defaultColWidth,
             boolean showRowsIndexes, boolean showColsIndexes,
@@ -388,10 +359,6 @@ public class JTableUtils {
         );
     }
 
-    /**
-     * Запись данных из массива (одномерного или двухмерного) в JTable
-     * (основная реализация, закрытый метод, используется в остальных writeArrayToJTable)
-     */
     private static void writeArrayToJTable(JTable table, Object array, String itemFormat) {
         if (!array.getClass().isArray()) {
             return;
@@ -439,23 +406,10 @@ public class JTableUtils {
         recalcJTableSize(table);
     }
 
-    /**
-     * Запись данных из массива int[][] в JTable
-     * (основная реализация, закрытый метод, используется в ArrayToGrid и Array2ToGrid)
-     */
     public static void writeArrayToJTable(JTable table, int[][] array) {
         writeArrayToJTable(table, array, "%d");
     }
 
-    /**
-     * Запись данных из массива double[] в JTable
-     * (основная реализация, закрытый метод, используется в ArrayToGrid и Array2ToGrid)
-     */
-
-    /**
-     * Чтение данных из JTable в двухмерный массив
-     * (основная реализация, используется в остальных readArrayFromJTable и readMatrixFromJTable)
-     */
     public static <T> T[][] readMatrixFromJTable(
             JTable table, Class<T> clazz, Function<String, ? extends T> converter,
             boolean errorIfEmptyCell, T emptyCellValue
@@ -482,9 +436,6 @@ public class JTableUtils {
         return matrix;
     }
 
-    /**
-     * Чтение данных из JTable в двухмерный массив Integer[][]
-     */
     public static int[][] readIntMatrixFromJTable(JTable table) throws ParseException {
         try {
             Integer[][] matrix = readMatrixFromJTable(table, Integer.class, Integer::parseInt, false, 0);
