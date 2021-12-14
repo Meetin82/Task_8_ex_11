@@ -19,7 +19,6 @@ public class ArrayUtils {
         }
         int[] result = new int[arr.length];
         for (int i = 0; i < arr.length; i++) {
-            // автоматическая распаковка из объекта
             result[i] = arr[i];
         }
         return result;
@@ -31,7 +30,6 @@ public class ArrayUtils {
         }
         double[] result = new double[arr.length];
         for (int i = 0; i < arr.length; i++) {
-            // автоматическая распаковка из объекта
             result[i] = arr[i];
         }
         return result;
@@ -46,9 +44,8 @@ public class ArrayUtils {
             list.add(scanner.nextInt());
         }
 
-        // из List<Integer> можно получить Integer[]
         Integer[] arr = list.toArray(new Integer[0]);
-        // Integer[] -> int[]
+
         return ArrayUtils.toPrimitive(arr);
     }
 
@@ -69,9 +66,6 @@ public class ArrayUtils {
         return sb.toString();
     }
 
-    /**
-     * Конвертация массива строк в двухмерный массив чисел int[][]
-     */
     public static int[][] toIntArray2(String[] lines) {
         int[][] arr2 = new int[lines.length][];
         for (int r = 0; r < lines.length; r++) {
@@ -95,9 +89,6 @@ public class ArrayUtils {
         return toString(arr2, null);
     }
 
-    /**
-     * Чтение всего текстового файла в массив строк
-     */
     public static String[] readLinesFromFile(String fileName) throws FileNotFoundException {
         List<String> lines;
         try (Scanner scanner = new Scanner(new File(fileName), "UTF-8")) {
@@ -105,14 +96,10 @@ public class ArrayUtils {
             while (scanner.hasNext()) {
                 lines.add(scanner.nextLine());
             }
-            // обязательно, чтобы закрыть открытый файл
         }
         return lines.toArray(new String[0]);
     }
 
-    /**
-     * Чтение двухмерного массива из текстового файла
-     */
     public static int[][] readIntArray2FromFile(String fileName) {
         try {
             return toIntArray2(readLinesFromFile(fileName));
@@ -133,14 +120,7 @@ public class ArrayUtils {
             throws FileNotFoundException {
         writeArrayToFile(fileName, arr2, null);
     }
-
-    /**
-     * Cоздание одномерного массива целых чисел, заполненного случайными числами
-     * @param length Кол-во элементов в массиве
-     * @param minValue Минимальное значение для случайных чисел (включая)
-     * @param maxValue Максимальное значение (не включая)
-     * @return Массив int[]
-     */
+    
     public static int[] createRandomIntArray(int length, int minValue, int maxValue) {
         int[] arr = new int[length];
         for (int i = 0; i < length; i++)
@@ -148,14 +128,6 @@ public class ArrayUtils {
         return arr;
     }
 
-    /**
-     * Cоздание двухмерного массива целых чисел, заполненного случайными числами
-     * @param rowCount Кол-во сток в двумерном массиве
-     * @param colCount Кол-во столбцов (элементов в каждой строке)
-     * @param minValue Минимальное значение для случайных чисел (включая)
-     * @param maxValue Максимальное значение (не включая)
-     * @return Массив int[][]
-     */
     public static int[][] createRandomIntMatrix(int rowCount, int colCount, int minValue, int maxValue) {
         int[][] matrix = new int[rowCount][];
         for (int r = 0; r < rowCount; r++)
@@ -163,9 +135,6 @@ public class ArrayUtils {
         return matrix;
     }
 
-    /**
-     * @see #createRandomIntMatrix(int, int, int, int)
-     */
     public static int[][] createRandomIntMatrix(int rowCount, int colCount, int maxValue) {
         return createRandomIntMatrix(rowCount, colCount, 0, maxValue);
     }
