@@ -24,13 +24,7 @@ import javax.swing.plaf.FontUIResource;
  * @author Дмитрий Соломатин (кафедра ПиИТ ФКН ВГУ)
  */
 public class SwingUtils {
-    /**
-     * Показать диалоговое окно с сообщением об ошибке
-     *
-     * @param message Сообщение
-     * @param title   Заголовок окна
-     * @param ex      Иcключение
-     */
+
     public static void showErrorMessageBox(String message, String title, Throwable ex) {
         StringBuilder sb = new StringBuilder(ex.toString());
         if (message != null) {
@@ -46,21 +40,10 @@ public class SwingUtils {
         JOptionPane.showMessageDialog(null, sb.toString(), title, JOptionPane.ERROR_MESSAGE);
     }
 
-    /**
-     * Показать диалоговое окно с сообщением об ошибке
-     *
-     * @param message Сообщение
-     * @param ex      Иcключение
-     */
     public static void showErrorMessageBox(String message, Throwable ex) {
         showErrorMessageBox(message, "Ошибка", ex);
     }
 
-    /**
-     * Показать диалоговое окно с сообщением об ошибке
-     *
-     * @param ex Иcключение
-     */
     public static void showErrorMessageBox(Throwable ex) {
         showErrorMessageBox(null, ex);
     }
